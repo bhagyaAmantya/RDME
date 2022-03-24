@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">RDME</string>
+    <string name="online">Connected with internet.</string>
+    <string name="offline">No network.</string>
+    <string name="granted">Permission granted.</string>
+    <string name="denied">Permission denied.</string>
+</resources>
