@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/videoFragment">
+    <fragment
+        android:id="@+id/videoFragment"
+        android:name="com.rivada.rdme.ui.VideoFragment"
+        android:label="Account"
+        tools:layout="@layout/fragment_video" />
+
+    <fragment
+        android:id="@+id/mapFragment"
+        android:name="com.rivada.rdme.ui.VideoFragment"
+        android:label="Favourites"
+        tools:layout="@layout/fragment_video" />
+
+    <fragment
+        android:id="@+id/settingFragment"
+        android:name="com.rivada.rdme.ui.VideoFragment"
+        android:label="Albums"
+        tools:layout="@layout/fragment_video" />
+
+    <fragment
+        android:id="@+id/exitFragment"
+        android:name="com.rivada.rdme.ui.VideoFragment"
+        android:label="Albums"
+        tools:layout="@layout/fragment_video" />
+</navigation>

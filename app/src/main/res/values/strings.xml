@@ -4,4 +4,6 @@
     <string name="offline">No network.</string>
     <string name="granted">Permission granted.</string>
     <string name="denied">Permission denied.</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

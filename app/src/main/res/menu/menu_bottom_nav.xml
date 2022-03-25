@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@id/videoFragment"
+        android:icon="@drawable/ic_video_icon"
+        android:title="Video" />
+
+    <item
+        android:id="@id/mapFragment"
+        android:icon="@drawable/ic_map_icon"
+        android:title="Map" />
+
+    <item
+        android:id="@id/settingFragment"
+        android:icon="@drawable/ic_settings_icon"
+        android:title="Settings" />
+
+    <item
+        android:id="@id/exitFragment"
+        android:icon="@drawable/ic_exit_icon"
+        android:title="Exit" />
+</menu>
