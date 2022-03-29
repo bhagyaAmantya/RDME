@@ -6,6 +6,7 @@ import android.os.Build
 import android.os.Bundle
 import android.telephony.*
 import android.util.Log
+import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
@@ -15,13 +16,30 @@ import androidx.navigation.findNavController
 import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.rivada.rdme.R
-import com.rivada.rdme.model.CellInfo
+import com.rivada.rdme.utils.FileLog
 import com.rivada.rdme.utils.toast
 import com.rivada.rdme.viewmodel.MainViewModel
 
 
 class FiveGDetectionActivity : AppCompatActivity() {
+    private val TAG = "FiveGDetectionActivity"
+    val MULTIPLE_PERMISSIONS = 10 // code you want.
+    var permissions = arrayOf(
+        Manifest.permission.WRITE_EXTERNAL_STORAGE,
+        Manifest.permission.ACCESS_NETWORK_STATE,
+        Manifest.permission.ACCESS_COARSE_LOCATION,
+        Manifest.permission.ACCESS_FINE_LOCATION
+    )
     private val viewModel: MainViewModel by viewModels()
+    override fun onStart() {
+        super.onStart()
+        if (checkPermissions()) {
+            // permissions granted.
+        } else {
+            // show dialog informing them that we lack certain permissions
+        }
+    }
+
     @RequiresApi(Build.VERSION_CODES.Q)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -29,7 +47,6 @@ class FiveGDetectionActivity : AppCompatActivity() {
         val navController = this.findNavController(R.id.nav_host_fragment)
         val navView: BottomNavigationView = findViewById(R.id.bottom_nav_view)
         navView.setupWithNavController(navController)
-        title = "KotlinApp"
         if (ContextCompat.checkSelfPermission(
                 this,
                 Manifest.permission.ACCESS_FINE_LOCATION
@@ -53,33 +70,55 @@ class FiveGDetectionActivity : AppCompatActivity() {
         }
         val telephonyManager = getSystemService(TELEPHONY_SERVICE) as TelephonyManager
         val allCellInfo = telephonyManager.allCellInfo
+        FileLog.v( TAG, allCellInfo.toString())
         for (cellInfo in allCellInfo) {
             if (cellInfo is CellInfoGsm) {
                 val cellIdentity = cellInfo.cellIdentity
-                viewModel.cellInfoCID(com.rivada.rdme.model.CellInfo("Gsm",cellIdentity.cid.toString()))
-                //TODO Use cellIdentity to check MCC/MNC code, for instance.
+                viewModel.cellInfoCID(
+                    com.rivada.rdme.model.CellInfo(
+                        "Gsm",
+                        cellIdentity.cid.toString()
+                    )
+                )
+                FileLog.v( TAG, cellIdentity.toString())
             } else if (cellInfo is CellInfoWcdma) {
                 val cellIdentity = cellInfo.cellIdentity
-                viewModel.cellInfoCID(com.rivada.rdme.model.CellInfo(
-                    "Wcdma",cellIdentity.cid.toString()
-                ))
+                viewModel.cellInfoCID(
+                    com.rivada.rdme.model.CellInfo(
+                        "Wcdma", cellIdentity.cid.toString()
+                    )
+                )
+                FileLog.v( TAG, cellIdentity.toString())
+
             } else if (cellInfo is CellInfoLte) {
                 val cellIdentity = cellInfo.cellIdentity
-                viewModel.cellInfoCID(com.rivada.rdme.model.CellInfo(
-                    "Lte",cellIdentity.ci.toString())
+                viewModel.cellInfoCID(
+                    com.rivada.rdme.model.CellInfo(
+                        "Lte", cellIdentity.ci.toString()
+                    )
                 )
+                FileLog.v( TAG, cellIdentity.toString())
+                Toast.makeText(this, cellIdentity.ci, Toast.LENGTH_SHORT).show()
+
             } else if (cellInfo is CellInfoCdma) {
                 val cellIdentity = cellInfo.cellIdentity
-                viewModel.cellInfoCID(com.rivada.rdme.model.CellInfo(
-                    "Cdma",cellIdentity.networkId.toString())
+                viewModel.cellInfoCID(
+                    com.rivada.rdme.model.CellInfo(
+                        "Cdma", cellIdentity.networkId.toString()
+                    )
                 )
-                Log.d("Test", "Identinty" + cellIdentity.networkId)
+                FileLog.v( TAG, cellIdentity.toString())
+                Toast.makeText(this, cellIdentity.networkId, Toast.LENGTH_SHORT).show()
             } else if (cellInfo is CellInfoNr) {
-                Log.d("Test", "info" + cellInfo.cellIdentity.toString())
-                viewModel.cellInfoCID(com.rivada.rdme.model.CellInfo(
-                    "Nr",cellInfo.cellIdentity.toString())
-                )
                 val cellIdentity = cellInfo.cellIdentity
+                Log.d("Test", "info" + cellInfo.cellIdentity.toString())
+                viewModel.cellInfoCID(
+                    com.rivada.rdme.model.CellInfo(
+                        "Nr", cellIdentity.toString()
+                    )
+                )
+                FileLog.v( TAG, cellIdentity.toString())
+                Toast.makeText(this, cellIdentity.toString(), Toast.LENGTH_SHORT).show()
             }
         }
     }
@@ -107,6 +146,44 @@ class FiveGDetectionActivity : AppCompatActivity() {
                     }
                 } else {
                     this.toast(R.string.denied)
+                }
+                return
+            }
+        }
+    }
+
+    private fun checkPermissions(): Boolean {
+        var result: Int
+        val listPermissionsNeeded: MutableList<String> = ArrayList()
+        for (p in permissions) {
+            result = ContextCompat.checkSelfPermission(this, p)
+            if (result != PackageManager.PERMISSION_GRANTED) {
+                listPermissionsNeeded.add(p)
+            }
+        }
+        if (!listPermissionsNeeded.isEmpty()) {
+            ActivityCompat.requestPermissions(
+                this,
+                listPermissionsNeeded.toTypedArray(),
+                MULTIPLE_PERMISSIONS
+            )
+            return false
+        }
+        return true
+    }
+
+    @JvmName("onRequestPermissionsResult1")
+    fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<String?>?,
+        grantResults: IntArray
+    ) {
+        when (requestCode) {
+            MULTIPLE_PERMISSIONS -> {
+                if (grantResults.size > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    // permissions granted.
+                } else {
+                    // no permissions granted.
                 }
                 return
             }
