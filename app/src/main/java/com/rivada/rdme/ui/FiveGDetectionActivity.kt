@@ -26,6 +26,7 @@ class FiveGDetectionActivity : AppCompatActivity() {
     val MULTIPLE_PERMISSIONS = 10 // code you want.
     var permissions = arrayOf(
         Manifest.permission.WRITE_EXTERNAL_STORAGE,
+        Manifest.permission.READ_EXTERNAL_STORAGE,
         Manifest.permission.ACCESS_NETWORK_STATE,
         Manifest.permission.ACCESS_COARSE_LOCATION,
         Manifest.permission.ACCESS_FINE_LOCATION
@@ -68,6 +69,7 @@ class FiveGDetectionActivity : AppCompatActivity() {
                 )
             }
         }
+
         val telephonyManager = getSystemService(TELEPHONY_SERVICE) as TelephonyManager
         val allCellInfo = telephonyManager.allCellInfo
         FileLog.v( TAG, allCellInfo.toString())
@@ -89,6 +91,7 @@ class FiveGDetectionActivity : AppCompatActivity() {
                     )
                 )
                 FileLog.v( TAG, cellIdentity.toString())
+              //  FileLog.saveFileUsingMediaStore(this, "sdgjsdsjd", "bc")
 
             } else if (cellInfo is CellInfoLte) {
                 val cellIdentity = cellInfo.cellIdentity
@@ -98,7 +101,7 @@ class FiveGDetectionActivity : AppCompatActivity() {
                     )
                 )
                 FileLog.v( TAG, cellIdentity.toString())
-                Toast.makeText(this, cellIdentity.ci, Toast.LENGTH_SHORT).show()
+                //Toast.makeText(this, cellIdentity.ci, Toast.LENGTH_SHORT).show()
 
             } else if (cellInfo is CellInfoCdma) {
                 val cellIdentity = cellInfo.cellIdentity
@@ -108,7 +111,7 @@ class FiveGDetectionActivity : AppCompatActivity() {
                     )
                 )
                 FileLog.v( TAG, cellIdentity.toString())
-                Toast.makeText(this, cellIdentity.networkId, Toast.LENGTH_SHORT).show()
+                //Toast.makeText(this, cellIdentity.networkId, Toast.LENGTH_SHORT).show()
             } else if (cellInfo is CellInfoNr) {
                 val cellIdentity = cellInfo.cellIdentity
                 Log.d("Test", "info" + cellInfo.cellIdentity.toString())
@@ -118,7 +121,7 @@ class FiveGDetectionActivity : AppCompatActivity() {
                     )
                 )
                 FileLog.v( TAG, cellIdentity.toString())
-                Toast.makeText(this, cellIdentity.toString(), Toast.LENGTH_SHORT).show()
+                //Toast.makeText(this, cellIdentity.toString(), Toast.LENGTH_SHORT).show()
             }
         }
     }
@@ -151,7 +154,6 @@ class FiveGDetectionActivity : AppCompatActivity() {
             }
         }
     }
-
     private fun checkPermissions(): Boolean {
         var result: Int
         val listPermissionsNeeded: MutableList<String> = ArrayList()

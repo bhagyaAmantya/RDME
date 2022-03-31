@@ -22,8 +22,9 @@ class VideoFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         viewModel.cId.observe(viewLifecycleOwner) {
-            internet_status.text = "${it.type} Cell ID:${it.cid}"
-
+          if(!it.cid.equals(0)){
+                internet_status.text = "${it.type} Cell ID:${it.cid}"
+          }
         }
     }
 
