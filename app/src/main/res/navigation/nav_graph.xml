@@ -7,24 +7,24 @@
     <fragment
         android:id="@+id/videoFragment"
         android:name="com.rivada.rdme.ui.VideoFragment"
-        android:label="Account"
+        android:label="Home"
         tools:layout="@layout/fragment_video" />
 
     <fragment
         android:id="@+id/mapFragment"
-        android:name="com.rivada.rdme.ui.VideoFragment"
-        android:label="Favourites"
-        tools:layout="@layout/fragment_video" />
+        android:name="com.rivada.rdme.ui.MapFragment"
+        android:label="Location"
+        tools:layout="@layout/fragment_map" />
 
     <fragment
         android:id="@+id/settingFragment"
-        android:name="com.rivada.rdme.ui.VideoFragment"
-        android:label="Albums"
-        tools:layout="@layout/fragment_video" />
+        android:name="com.rivada.rdme.ui.UploadFileFragment"
+        android:label="Config"
+        tools:layout="@layout/fragment_upload" />
 
     <fragment
         android:id="@+id/exitFragment"
-        android:name="com.rivada.rdme.ui.VideoFragment"
-        android:label="Albums"
-        tools:layout="@layout/fragment_video" />
+        android:name="com.rivada.rdme.ui.MapFragment"
+        android:label="Logoff"
+        tools:layout="@layout/fragment_map" />
 </navigation>
