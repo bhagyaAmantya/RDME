@@ -24,7 +24,7 @@ class SplashScreenActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.splash_activity)
-        setUpVideoURL()
+       // setUpVideoURL()
         window.setFlags(
             WindowManager.LayoutParams.FLAG_FULLSCREEN,
             WindowManager.LayoutParams.FLAG_FULLSCREEN
@@ -42,7 +42,7 @@ class SplashScreenActivity : AppCompatActivity() {
             val intent = Intent(this, FiveGDetectionActivity::class.java)
             startActivity(intent)
             finish()
-        }, 4000)
+        }, 2500)
     }
     private fun setUpVideoURL() {
         val myJson = """
@@ -62,7 +62,7 @@ class SplashScreenActivity : AppCompatActivity() {
     ],
     "video": {
       "showvideo": "false",
-      "url": "https://playready.directtaps.net/smoothstreaming/SSWSS720H264/SuperSpeedway_720.ism/Manifest",
+      "url": "rtsp://wowzaec2demo.streamlock.net/vod/mp4:BigBuckBunny_115k.mp4",
       "lowUrl": "url",
       "highUrl": "url",
       "description": "some description"

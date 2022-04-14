@@ -12,9 +12,9 @@
 
     <fragment
         android:id="@+id/mapFragment"
-        android:name="com.rivada.rdme.ui.MapFragment"
+        android:name="com.rivada.rdme.ui.MapsFragment"
         android:label="Location"
-        tools:layout="@layout/fragment_map" />
+        tools:layout="@layout/fragment_maps" />
 
     <fragment
         android:id="@+id/settingFragment"

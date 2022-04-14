@@ -30,9 +30,9 @@ class MainViewModel @Inject constructor(): ViewModel () {
     fun cellInfoCID(item:CellInfo) {
         mutableCID.value = item
     }
-    fun jsonData(item: List<PersonItem>?){
+   /* fun jsonData(item: List<PersonItem>?){
         mData.value =item
-    }
+    }*/
     fun payLoadList(payLoad:PayLoadModel){
         mPayLoad.value = payLoad
     }

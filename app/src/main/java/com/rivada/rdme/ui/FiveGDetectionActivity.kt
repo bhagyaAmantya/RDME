@@ -41,6 +41,7 @@ class FiveGDetectionActivity : AppCompatActivity() {
     private val PermissionsRequestCode = 123
     private lateinit var managePermissions: ManagePermissions
     private lateinit var mNetworkUtils: NetworkUtils
+    lateinit var session: AppConstants
 
     val MULTIPLE_PERMISSIONS = 10 // code you want.
     var permissions = listOf<String>(
@@ -65,6 +66,7 @@ class FiveGDetectionActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         managePermissions = ManagePermissions(this, permissions, PermissionsRequestCode)
+        session = AppConstants(this)
         internetConnection()
         val navController = this.findNavController(R.id.nav_host_fragment)
         val navView: BottomNavigationView = findViewById(R.id.bottom_nav_view)
@@ -205,25 +207,6 @@ class FiveGDetectionActivity : AppCompatActivity() {
         }
     }
 
-    private fun checkPermissions(): Boolean {
-        var result: Int
-        val listPermissionsNeeded: MutableList<String> = ArrayList()
-        for (p in permissions) {
-            result = ContextCompat.checkSelfPermission(this, p)
-            if (result != PackageManager.PERMISSION_GRANTED) {
-                listPermissionsNeeded.add(p)
-            }
-        }
-        if (!listPermissionsNeeded.isEmpty()) {
-            ActivityCompat.requestPermissions(
-                this,
-                listPermissionsNeeded.toTypedArray(),
-                MULTIPLE_PERMISSIONS
-            )
-            return false
-        }
-        return true
-    }
 
     @JvmName("onRequestPermissionsResult1")
     fun onRequestPermissionsResult(
@@ -322,13 +305,19 @@ class FiveGDetectionActivity : AppCompatActivity() {
                 val path = data?.data
                 val jsonSelectedFile = path?.let { contentResolver.openInputStream(it) };
                 val inputAsString = jsonSelectedFile?.bufferedReader().use { it?.readText() }
-                readJSON(inputAsString)
+                val payLoadModel:PayLoadModel = readJSON(inputAsString)
+                viewModel.payLoadList(payLoadModel)
+                session.createUpdateSession(config = true,
+                    payLoadModel.payload.cells[1].cellname,
+                    payLoadModel.payload.cells[1].color,
+                    payLoadModel.payload.video.url, payLoadModel.payload.video.showvideo
+                )
                 Toast.makeText(this, "Json: $inputAsString", Toast.LENGTH_SHORT).show()
             }
         }
     }
 
-    private fun readJSON(jsonFileString: String?) {
+     /*fun readJSON(jsonFileString: String?) {
         Log.i("data", jsonFileString.toString())
         val gson = Gson()
         val listPersonType = object : TypeToken<PayLoadModel>() {}.type
@@ -340,5 +329,5 @@ class FiveGDetectionActivity : AppCompatActivity() {
             )
         }
         viewModel.payLoadList(jsonData)
-    }
+    }*/
 }

@@ -38,9 +38,9 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
         managePermissions = ManagePermissions(this,permissions,PermissionsRequestCode)
         managePermissions.checkPermissions()
-        val navController = this.findNavController(R.id.nav_host_fragment)
+       /* val navController = this.findNavController(R.id.nav_host_fragment)
         val navView: BottomNavigationView = findViewById(R.id.bottom_nav_view)
-        navView.setupWithNavController(navController)
+        navView.setupWithNavController(navController)*/
         internetConnection()
     }
 
@@ -72,7 +72,7 @@ class MainActivity : AppCompatActivity() {
         val gson = Gson()
         val listPersonType = object : TypeToken<List<PersonItem>>() {}.type
         var persons: List<PersonItem> = gson.fromJson(jsonFileString, listPersonType)
-        viewModel.jsonData(persons)
+      //  viewModel.jsonData(persons)
         persons.forEachIndexed { idx, personItem -> Log.i("data", "> Item $idx:\n$personItem") }    }
 }
 
