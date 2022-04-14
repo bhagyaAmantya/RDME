@@ -1,31 +1,23 @@
 package com.rivada.rdme.ui
 
 
-import android.content.Context
 import android.graphics.Color
-import android.graphics.drawable.Drawable
+import android.media.MediaPlayer
 import android.net.Uri
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.AdapterView
-import android.widget.ArrayAdapter
 import android.widget.MediaController
-import android.widget.Toast
-import androidx.core.graphics.drawable.toDrawable
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import com.google.android.exoplayer2.*
 import com.google.android.exoplayer2.extractor.DefaultExtractorsFactory
-import com.google.android.exoplayer2.offline.FilteringManifestParser
 import com.google.android.exoplayer2.source.DefaultMediaSourceFactory
 import com.google.android.exoplayer2.source.MediaSource
 import com.google.android.exoplayer2.source.ProgressiveMediaSource
 import com.google.android.exoplayer2.source.dash.DashMediaSource
 import com.google.android.exoplayer2.source.dash.DefaultDashChunkSource
-import com.google.android.exoplayer2.source.dash.manifest.DashManifestParser
 import com.google.android.exoplayer2.source.hls.HlsMediaSource
 import com.google.android.exoplayer2.upstream.*
 import com.rivada.rdme.R
@@ -80,7 +72,7 @@ class VideoFragment : Fragment() {
         }
             viewModel.cId.observe(viewLifecycleOwner) {
                 if (!it.cid.equals(0)) {
-                    internet_status.text = "${it.type} Cell ID:${it.cid}"
+                    internet_status.text = "${it.type} Cell ID: ${it.cid}"
                 }
             }
             viewModel.nSignalStrength.observe(viewLifecycleOwner) {
@@ -109,7 +101,8 @@ class VideoFragment : Fragment() {
         color: String?
     ) {
         if (showvideo == "true") {
-            if (videoUrl?.contains("rtsp://") == true) {
+            val uri = Uri.parse(videoUrl)
+            if (videoUrl?.contains("rtsp://") == true || uri.lastPathSegment?.contains("webm") == true) {
                 initializeVideoPlayer(videoUrl)
             } else {
                 initializeExoPlayer(videoUrl)
@@ -124,11 +117,26 @@ class VideoFragment : Fragment() {
         val uri = Uri.parse(videoJsonUrl)
         val mediaController = MediaController(context)
         mediaController.setAnchorView(videoView)
-
         videoView.setMediaController(mediaController)
         videoView.setVideoURI(uri)
         videoView.requestFocus()
+        val onInfoToPlayStateListener: MediaPlayer.OnInfoListener =
+            MediaPlayer.OnInfoListener { mp, what, extra ->
+                if (MediaPlayer.MEDIA_INFO_VIDEO_RENDERING_START == what) {
+                    my_spinner.visibility = View.GONE
+                }
+                if (MediaPlayer.MEDIA_INFO_BUFFERING_START == what) {
+                    my_spinner.visibility = View.VISIBLE
+                }
+                if (MediaPlayer.MEDIA_INFO_BUFFERING_END == what) {
+                    my_spinner.visibility = View.GONE
+                }
+                false
+            }
         videoView.start()
+        videoView.setOnInfoListener(onInfoToPlayStateListener)
+
+
     }
 
     private fun initializeExoPlayer(videoJsonUrl:String?) {
@@ -212,7 +220,6 @@ class VideoFragment : Fragment() {
         super.onDestroy()
         releasePlayer()
     }
-
 }
 
 
