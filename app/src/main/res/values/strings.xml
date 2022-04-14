@@ -4,7 +4,7 @@
     <string name="offline">No network.</string>
     <string name="granted">Permission granted.</string>
     <string name="denied">Permission denied.</string>
-    <string name="upload">Add Config File</string>
+    <string name="upload">Update Config</string>
     <string name="low">LOW</string>
     <string name="high">HIGH</string>
     <string name="medium">MEDIUM</string>

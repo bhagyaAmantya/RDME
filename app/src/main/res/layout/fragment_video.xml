@@ -24,6 +24,7 @@
             android:layout_height="wrap_content"
             android:text=""
             android:layout_margin="8dp"
+            android:textColor="@color/black"
             android:textAppearance="@style/Base.TextAppearance.Material3.LabelLarge"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
@@ -42,6 +43,8 @@
                 android:layout_height="wrap_content"
                 android:text="@string/signal_strength"
                 android:textSize="14sp"
+               android:textStyle="bold"
+                android:textColor="@color/black"
                 app:layout_constraintLeft_toLeftOf="parent"
                 />
             <TextView
@@ -59,6 +62,7 @@
             android:layout_height="wrap_content"
             android:text=""
             android:layout_margin="8dp"
+            android:textColor="@color/black"
             android:textAppearance="@style/Base.TextAppearance.Material3.LabelLarge"
             app:layout_constraintTop_toBottomOf="@+id/sgnl_layout"
             app:layout_constraintLeft_toLeftOf="parent"

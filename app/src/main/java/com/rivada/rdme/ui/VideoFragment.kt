@@ -52,7 +52,6 @@ class VideoFragment : Fragment(){
     private val dataSourceFactory: DataSource.Factory by lazy {
         DefaultDataSourceFactory(requireActivity(), "exoplayer-sample")
     }
-    val items = arrayOf("HIGH","LOW","MEDIUM")
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -93,25 +92,6 @@ class VideoFragment : Fragment(){
                 initializePlayer()
             }
         }
-       /* if (spinner != null) {
-            val adapter = ArrayAdapter(requireActivity().applicationContext,
-                android.R.layout.simple_spinner_item,items
-            )
-            spinner.adapter = adapter
-
-            spinner.onItemSelectedListener = object :
-                AdapterView.OnItemSelectedListener {
-                override fun onItemSelected(parent: AdapterView<*>,
-                                            view: View?, position: Int, id: Long) {
-                    Toast.makeText(requireActivity(),
-                        items[position], Toast.LENGTH_SHORT).show()
-                }
-
-                override fun onNothingSelected(parent: AdapterView<*>) {
-                    // write code to perform some action
-                }
-            }
-        }*/
 
     }
 

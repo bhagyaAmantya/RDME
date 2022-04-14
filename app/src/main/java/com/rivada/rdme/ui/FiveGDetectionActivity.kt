@@ -323,7 +323,7 @@ class FiveGDetectionActivity : AppCompatActivity() {
                 val jsonSelectedFile = path?.let { contentResolver.openInputStream(it) };
                 val inputAsString = jsonSelectedFile?.bufferedReader().use { it?.readText() }
                 readJSON(inputAsString)
-                Toast.makeText(this, "Json: $inputAsString", Toast.LENGTH_LONG).show()
+                Toast.makeText(this, "Json: $inputAsString", Toast.LENGTH_SHORT).show()
             }
         }
     }
