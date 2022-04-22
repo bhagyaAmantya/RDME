@@ -5,15 +5,13 @@
     <string name="granted">Permission granted.</string>
     <string name="denied">Permission denied.</string>
     <string name="upload">Update Config</string>
-    <string name="low">LOW</string>
-    <string name="high">HIGH</string>
-    <string name="medium">MEDIUM</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="title">Do you want to close this application ?</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
     <string name="signal_strength">Signal Strength :</string>
-    <string-array name="Quality">
-        <item>LOW</item>
-        <item>MEDIUM</item>
-        <item>HIGH</item>
-    </string-array>
+    <string name="gsm">GSM</string>
+    <string name="cdma">CDMA</string>
+    <string name="lte">LTE</string>
+    <string name="wcdma">WCDMA</string>
+    <string name="nr">NR</string>
 </resources>

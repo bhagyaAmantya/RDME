@@ -1,6 +1,7 @@
 package com.rivada.rdme.ui
 
 
+import android.annotation.SuppressLint
 import android.graphics.Color
 import android.media.MediaPlayer
 import android.net.Uri
@@ -11,7 +12,9 @@ import android.view.ViewGroup
 import android.widget.MediaController
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import com.google.android.exoplayer2.*
+import com.google.android.exoplayer2.DefaultRenderersFactory
+import com.google.android.exoplayer2.ExoPlayer
+import com.google.android.exoplayer2.MediaItem
 import com.google.android.exoplayer2.extractor.DefaultExtractorsFactory
 import com.google.android.exoplayer2.source.DefaultMediaSourceFactory
 import com.google.android.exoplayer2.source.MediaSource
@@ -19,7 +22,8 @@ import com.google.android.exoplayer2.source.ProgressiveMediaSource
 import com.google.android.exoplayer2.source.dash.DashMediaSource
 import com.google.android.exoplayer2.source.dash.DefaultDashChunkSource
 import com.google.android.exoplayer2.source.hls.HlsMediaSource
-import com.google.android.exoplayer2.upstream.*
+import com.google.android.exoplayer2.upstream.DataSource
+import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory
 import com.rivada.rdme.R
 import com.rivada.rdme.model.PayLoadModel
 import com.rivada.rdme.utils.AppConstants
@@ -32,22 +36,16 @@ import kotlinx.android.synthetic.main.fragment_video.*
 
 @AndroidEntryPoint
 class VideoFragment : Fragment() {
-    companion object {
-        private val BANDWIDTH_METER = DefaultBandwidthMeter()
-    }
-
     private val viewModel: MainViewModel by activityViewModels()
-    //private var videoJsonUrl: String? = null
     private var player: ExoPlayer? = null
     lateinit var session: AppConstants
-    //private var sampleUrl = "https://bitmovin-a.akamaihd.net/content/MI201109210084_1/mpds/f08e80da-bf1d-4e3d-8899-f0f6155f6efa.mpd"
-    //  private var sampleUrl = "https://multiplatform-f.akamaihd.net/i/multi/april11/sintel/sintel-hd_,512x288_450_b,640x360_700_b,768x432_1000_b,1024x576_1400_m,.mp4.csmil/master.m3u8"
     private var playWhenReady = true
     private var currentWindow = 0
     private var playbackPosition: Long = 0
     private val dataSourceFactory: DataSource.Factory by lazy {
         DefaultDataSourceFactory(requireActivity(), "exoplayer-sample")
     }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -55,45 +53,58 @@ class VideoFragment : Fragment() {
         return inflater.inflate(R.layout.fragment_video, container, false)
     }
 
+    @SuppressLint("SetTextI18n")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         session = AppConstants(requireActivity())
-        if(session.isUpdate()){
-            setUpRawData(session.getvideo(),
+        if (session.isUpdate()) {
+            setUpRawData(
+                session.getVideo(),
                 session.getURL(),
-                session.getcellname(),
-              session.getcolor())
-        }else{
+                session.getCellName(),
+                session.getColor()
+            )
+        } else {
             val jsonFileString = getJsonDataFromAsset(requireContext(), "config.json")
-            val payLoadModel:PayLoadModel = readJSON(jsonFileString)
-            setUpRawData(payLoadModel.payload.video.showvideo,
+            val payLoadModel: PayLoadModel = readJSON(jsonFileString)
+            setUpRawData(
+                payLoadModel.payload.video.showvideo,
                 payLoadModel.payload.video.url,
                 payLoadModel.payload.cells[0].cellname,
-                payLoadModel.payload.cells[0].color)
+                payLoadModel.payload.cells[0].color
+            )
         }
-            viewModel.cId.observe(viewLifecycleOwner) {
-                if (!it.cid.equals(0)) {
-                    internet_status.text = "${it.type} Cell ID: ${it.cid}"
-                }
+        viewModel.cId.observe(viewLifecycleOwner) {
+            if (!it.cid.equals(0)) {
+                internet_status.text = "${it.type} Cell ID: ${it.cid}"
             }
-            viewModel.nSignalStrength.observe(viewLifecycleOwner) {
-                signal_status.text = it
+        }
+        /* viewModel.nSignalStrength.observe(viewLifecycleOwner) {
+             signal_status.text = it
 
-            }
-            viewModel.nColorCode.observe(viewLifecycleOwner) {
-                signal_status.setTextColor(Color.parseColor(it))
-            }
+         }
+         viewModel.nColorCode.observe(viewLifecycleOwner) {
+             signal_status.setTextColor(Color.parseColor(it))
+         }*/
+        viewModel.nSignalData.observe(viewLifecycleOwner) {
+            signal_status.text = "CsiRsrp:${it.getCsiRsrp}" +
+                    "CsiRsrq:${it.getCsiRsrq}" +
+                    "CsiSinr:${it.getCsiSinr}" +
+                    "SsRsrp:${it.getSsRsrp}" +
+                    "SsRsrq:${it.getSsRsrq}" +
+                    "SsSinr:${it.getSsSinr}"
 
-            viewModel.nPayLoad.observe(viewLifecycleOwner) {
-                setUpRawData(
-                    it?.payload?.video?.showvideo,
-                    it?.payload?.video?.url,
-                    it.payload.cells[1].cellname,
-                    it?.payload?.cells?.get(1)?.color)
+        }
 
-            }
-
-
+        viewModel.nPayLoad.observe(viewLifecycleOwner) {
+            setUpRawData(
+                it?.payload?.video?.showvideo,
+                it?.payload?.video?.url,
+                it.payload.cells[1].cellname,
+                it?.payload?.cells?.get(1)?.color
+            )
+        }
     }
+
     private fun setUpRawData(
         showvideo: String?,
         videoUrl: String?,
@@ -112,6 +123,7 @@ class VideoFragment : Fragment() {
         layout.setBackgroundColor(Color.parseColor(color))
 
     }
+
     private fun initializeVideoPlayer(videoJsonUrl: String?) {
         videoView.visibility = View.VISIBLE
         val uri = Uri.parse(videoJsonUrl)
@@ -139,7 +151,7 @@ class VideoFragment : Fragment() {
 
     }
 
-    private fun initializeExoPlayer(videoJsonUrl:String?) {
+    private fun initializeExoPlayer(videoJsonUrl: String?) {
         video_player_view.visibility = View.VISIBLE
         if (player == null) {
             player = ExoPlayer.Builder(

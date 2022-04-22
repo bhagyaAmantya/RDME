@@ -24,7 +24,7 @@
 
     <fragment
         android:id="@+id/exitFragment"
-        android:name="com.rivada.rdme.ui.MapsFragment"
+        android:name="com.rivada.rdme.ui.ExitFragment"
         android:label="Logoff"
-        tools:layout="@layout/fragment_maps" />
+        tools:layout="@layout/fragment_upload" />
 </navigation>

@@ -14,7 +14,7 @@ class ManagePermissions(val activity: Activity, private val list: List<String>, 
         if (isPermissionsGranted() != PackageManager.PERMISSION_GRANTED) {
             showAlert()
         } else {
-            Toast.makeText(activity, "Permissions already granted.", Toast.LENGTH_SHORT).show()
+           // Toast.makeText(activity, "Permissions already granted.", Toast.LENGTH_SHORT).show()
         }
     }
 
@@ -23,7 +23,7 @@ class ManagePermissions(val activity: Activity, private val list: List<String>, 
     private fun isPermissionsGranted(): Int {
         // PERMISSION_GRANTED : Constant Value: 0
         // PERMISSION_DENIED : Constant Value: -1
-        var counter = 0;
+        var counter = 0
         for (permission in list) {
             counter += ContextCompat.checkSelfPermission(activity, permission)
         }
@@ -77,4 +77,5 @@ class ManagePermissions(val activity: Activity, private val list: List<String>, 
         if (result == PackageManager.PERMISSION_GRANTED) return true
         return false
     }
+
 }

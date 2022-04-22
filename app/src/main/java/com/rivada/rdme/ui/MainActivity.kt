@@ -60,7 +60,7 @@ class MainActivity : AppCompatActivity() {
         if (resultCode == Activity.RESULT_OK) {
             if (requestCode == AppConstants.SELECT_FILE) {
                val path = data?.data
-                val jsonSelectedFile = path?.let { contentResolver.openInputStream(it) };
+                val jsonSelectedFile = path?.let { contentResolver.openInputStream(it) }
                 val inputAsString = jsonSelectedFile?.bufferedReader().use { it?.readText() }
                 readJSON(inputAsString)
                 Toast.makeText(this, "Json: $inputAsString", Toast.LENGTH_LONG).show()

@@ -10,6 +10,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.app.ActivityCompat
 import com.google.android.gms.location.FusedLocationProviderClient
+import com.google.android.gms.location.LocationRequest
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.OnMapReadyCallback
@@ -22,6 +23,12 @@ class MapsFragment : Fragment() {
     private lateinit var currentLocation: Location
     private lateinit var fusedLocationProviderClient: FusedLocationProviderClient
     private val permissionCode = 101
+  //  lateinit var mGoogleMap: GoogleMap
+  //  var mapFrag: SupportMapFragment? = null
+    lateinit var mLocationRequest: LocationRequest
+    //var mLastLocation: Location? = null
+   // internal var mCurrLocationMarker: Marker? = null
+   // internal var mFusedLocationClient: FusedLocationProviderClient? = null
 
     private val callback = OnMapReadyCallback { googleMap ->
         /**
@@ -35,8 +42,8 @@ class MapsFragment : Fragment() {
          */
         val latLng = LatLng(currentLocation.latitude, currentLocation.longitude)
         googleMap.addMarker(MarkerOptions().position(latLng).title("I am here!"))
-        googleMap.moveCamera(CameraUpdateFactory.newLatLng(latLng))
-        googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 8f))
+        //googleMap.moveCamera(CameraUpdateFactory.newLatLng(latLng,14.5f))
+        googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 17f))
 
     }
 
