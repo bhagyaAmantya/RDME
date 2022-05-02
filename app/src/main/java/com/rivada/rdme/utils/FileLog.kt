@@ -45,39 +45,6 @@ object FileLog {
             Log.e("FileLog", Log.getStackTraceString(e))
         }
     }
-   /* @RequiresApi(Build.VERSION_CODES.Q)
-     fun saveFileUsingMediaStore(context: Context, data: String, fileName: String) {
-        try {
-
-            val contentValues = ContentValues().apply {
-                put(MediaStore.MediaColumns.DISPLAY_NAME, fileName)
-                put(MediaStore.MediaColumns.MIME_TYPE, "text/plain")
-                put(MediaStore.MediaColumns.RELATIVE_PATH, Environment.DIRECTORY_DOWNLOADS)
-            }
-            val resolver = context.contentResolver
-            val uri = resolver.insert(MediaStore.Files.getContentUri("external"), contentValues)
-            val os: OutputStream? = uri?.let { resolver.openOutputStream(it, "wt") }
-
-           *//* if (os != null) {
-                os.write(data.toByteArray())
-                os.flush()
-                os.close()
-            }*//*
-        }
-        catch (e: FileNotFoundException) {
-            e.printStackTrace()
-        } catch (e: IOException) {
-            e.printStackTrace()
-        }
-       *//* if (uri != null) {
-            URL(url).openStream().use { input ->
-                resolver.openOutputStream(uri).use { output ->
-                    input.copyTo(output!!, DEFAULT_BUFFER_SIZE)
-                }
-            }
-        }*//*
-    }
-*/
     fun setCurrentPriority(currentPriority: Int) {
         sCurrentPriority = currentPriority
     }

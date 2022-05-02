@@ -2,32 +2,44 @@ package com.rivada.rdme.utils
 
 import android.content.Context
 import android.content.SharedPreferences
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
+import com.rivada.rdme.model.Cell
+import java.lang.reflect.Type
+import java.util.ArrayList
 
 class AppConstants(var context: Context) {
     var pref: SharedPreferences
-    var edior: SharedPreferences.Editor
-    var PRIVATE_MODE: Int = 0
+    private var editor: SharedPreferences.Editor
+    private var PRIVATE_MODE: Int = 0
+
 
     init {
         pref = context.getSharedPreferences(PREF_NAME, PRIVATE_MODE)
-        edior = pref.edit()
+        editor = pref.edit()
     }
 
     companion object {
         const val SELECT_FILE = 1
         const val LOCATION_PERMISSION_CODE = 100
         const val STORAGE_PERMISSION_CODE = 101
-        val PREF_NAME: String = "KotlinDemo"
-        val IS_UPDATE: String = "isUpdate"
-        val KEY_NAME: String = "cellname"
-        val KEY_COLOR: String = "cellcolor"
-        val KEY_URL: String = "url"
-        val KEY_SHOW: String = "showVideo"
+        const val PREF_NAME: String = "KotlinDemo"
+        const val IS_UPDATE: String = "isUpdate"
+        const val KEY_NAME: String = "cellname"
+        const val KEY_COLOR: String = "cellcolor"
+        const val KEY_URL: String = "url"
+        const val KEY_SHOW: String = "showVideo"
+        const val KEY_ID: String = "cellId"
+        const val KEY_CELL_LIST: String = "CELL_LIST"
 
     }
 
     fun isUpdate(): Boolean {
-        return pref.getBoolean(IS_UPDATE, false)
+        return pref.getBoolean(IS_UPDATE,false)
+    }
+    fun setUpdate(config:Boolean){
+        editor.putBoolean(IS_UPDATE, config)
+        editor.commit()
     }
 
     fun createUpdateSession(
@@ -35,14 +47,16 @@ class AppConstants(var context: Context) {
         name: String,
         color: String,
         uri: String,
-        showvideo: String
+        showVideo: String,
+        cellId:String
     ) {
-        edior.putBoolean(IS_UPDATE, config)
-        edior.putString(KEY_NAME, name)
-        edior.putString(KEY_COLOR, color)
-        edior.putString(KEY_URL, uri)
-        edior.putString(KEY_SHOW, showvideo)
-        edior.commit()
+        editor.putBoolean(IS_UPDATE, config)
+        editor.putString(KEY_NAME, name)
+        editor.putString(KEY_COLOR, color)
+        editor.putString(KEY_URL, uri)
+        editor.putString(KEY_SHOW, showVideo)
+        editor.putString(KEY_ID, cellId)
+        editor.commit()
     }
 
     fun getColor(): String? {
@@ -59,6 +73,23 @@ class AppConstants(var context: Context) {
 
     fun getURL(): String? {
         return pref.getString(KEY_URL, "")
+    }
+    fun getCellId():String?{
+        return pref.getString(KEY_ID,"")
+    }
+
+    fun saveArrayList(list: List<Cell>, key: String?) {
+        val gson = Gson()
+        val json: String = gson.toJson(list)
+        editor.putString(key, json)
+        editor.apply()
+    }
+
+    fun getArrayList(key: String?): List<Cell>? {
+        val gson = Gson()
+        val json: String? = pref.getString(key, null)
+        val type: Type = object : TypeToken<List<Cell>?>() {}.type
+        return gson.fromJson(json, type)
     }
 }
 

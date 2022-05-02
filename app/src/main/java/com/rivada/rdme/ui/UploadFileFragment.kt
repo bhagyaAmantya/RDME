@@ -28,16 +28,18 @@ class UploadFileFragment : Fragment() {
 
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        //viewModel.updateConfigDialog(false)
         btn_upload.setOnClickListener(View.OnClickListener {
             val pdfIntent = Intent(Intent.ACTION_GET_CONTENT)
             pdfIntent.type = "application/json"
             pdfIntent.addCategory(Intent.CATEGORY_OPENABLE)
             activity?.startActivityForResult(pdfIntent, AppConstants.SELECT_FILE)
         })
-        viewModel.nPayLoad.observe(viewLifecycleOwner) { it ->
-            json_text.text = "Name:${it?.payload?.cells?.get(1)?.cellname}  \n Video URL:" +
+        viewModel.nPayLoad.observe(viewLifecycleOwner) {
+            json_text.text = "Video URL:" +
                     " ${it?.payload?.video?.url}"
         }
+
     }
 
 

@@ -14,12 +14,12 @@
     <application
         android:name=".MyApplication"
         android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@mipmap/rivada_mini"
         android:label="@string/app_name"
+        android:requestLegacyExternalStorage="true"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.RDME">
-
         <!--
              TODO: Before you run your application, you need a Google Maps API key.
 
@@ -33,7 +33,7 @@
         -->
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="AIzaSyBY3UAtUpRxA-iE8nostQjNROnqH47MlvQ" />
+            android:value="AIzaSyBPAYMgWdi2pQHx1if5ceHNiw4WrbRaY_8" />
 
         <activity
             android:name=".ui.SplashScreenActivity"

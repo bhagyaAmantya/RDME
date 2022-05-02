@@ -5,7 +5,9 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.rivada.rdme.model.*
+import com.rivada.rdme.utils.signalStrengthCalculation
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.*
 import javax.inject.Inject
 
 @HiltViewModel
@@ -20,31 +22,44 @@ class MainViewModel @Inject constructor(): ViewModel () {
     val nPayLoad: LiveData<PayLoadModel> get() = mPayLoad
 
     private val mSignalStrength = MutableLiveData<String>()
-    val nSignalStrength:LiveData<String> get() = mSignalStrength
+    val nSignalStrength: LiveData<String> get() = mSignalStrength
 
     private val mColorCode = MutableLiveData<String>()
-    val nColorCode:LiveData<String> get() = mColorCode
+    val nColorCode: LiveData<String> get() = mColorCode
+
+    private val mConfigDialog = MutableLiveData<Boolean>()
+    val nConfigDialog: LiveData<Boolean> get() = mConfigDialog
 
     private val mSignalData = MutableLiveData<SignalData>()
     val nSignalData: MutableLiveData<SignalData> get() = mSignalData
 
-    fun cellInfoCID(item:CellInfo) {
+    fun cellInfoCID(item: CellInfo) {
         mutableCID.value = item
     }
-   /* fun jsonData(item: List<PersonItem>?){
-        mData.value =item
-    }*/
-    fun payLoadList(payLoad:PayLoadModel){
+    fun payLoadList(payLoad: PayLoadModel) {
         mPayLoad.value = payLoad
     }
-    fun getSignal(signalStrength: String,colorCode:String) {
+
+    fun getSignal(signalStrength: String, colorCode: String) {
         mSignalStrength.value = signalStrength
         mColorCode.value = colorCode
     }
+
     private val mCoordinates = MutableLiveData<List<LatLonModel>>()
     val nCoordinates: MutableLiveData<List<LatLonModel>> get() = mCoordinates
 
     fun updateSignalData(signalData: SignalData){
         mSignalData.value = signalData
+        updateSignalColorCode(signalData)
     }
+
+    private fun updateSignalColorCode(mSignalData: SignalData){
+        val cell = signalStrengthCalculation(mSignalData)
+        mSignalStrength.value = cell?.cellname
+        mColorCode.value = cell?.color
+    }
+     fun updateConfigDialog(dialog:Boolean){
+        mConfigDialog.value = dialog
+    }
+
 }

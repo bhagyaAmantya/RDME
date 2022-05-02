@@ -15,36 +15,30 @@ import com.google.android.gms.location.LocationServices
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
+import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
+import com.google.android.material.snackbar.Snackbar
 import com.rivada.rdme.R
+import kotlinx.android.synthetic.main.fragment_maps.*
 
 class MapsFragment : Fragment() {
     private lateinit var currentLocation: Location
     private lateinit var fusedLocationProviderClient: FusedLocationProviderClient
     private val permissionCode = 101
-  //  lateinit var mGoogleMap: GoogleMap
-  //  var mapFrag: SupportMapFragment? = null
-    lateinit var mLocationRequest: LocationRequest
-    //var mLastLocation: Location? = null
-   // internal var mCurrLocationMarker: Marker? = null
-   // internal var mFusedLocationClient: FusedLocationProviderClient? = null
-
+    internal var mCurrLocationMarker: Marker? = null
     private val callback = OnMapReadyCallback { googleMap ->
-        /**
-         * Manipulates the map once available.
-         * This callback is triggered when the map is ready to be used.
-         * This is where we can add markers or lines, add listeners or move the camera.
-         * In this case, we just add a marker near Sydney, Australia.
-         * If Google Play services is not installed on the device, the user will be prompted to
-         * install it inside the SupportMapFragment. This method will only be triggered once the
-         * user has installed Google Play services and returned to the app.
-         */
+        if (mCurrLocationMarker != null) {
+            mCurrLocationMarker?.remove()
+        }
         val latLng = LatLng(currentLocation.latitude, currentLocation.longitude)
-        googleMap.addMarker(MarkerOptions().position(latLng).title("I am here!"))
-        //googleMap.moveCamera(CameraUpdateFactory.newLatLng(latLng,14.5f))
-        googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 17f))
-
+        val markerOptions = MarkerOptions()
+        markerOptions.position(latLng)
+        markerOptions.title("Current Position")
+        markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_VIOLET))
+        mCurrLocationMarker = googleMap.addMarker(markerOptions)
+        googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 18f))
     }
 
     override fun onCreateView(
@@ -59,6 +53,14 @@ class MapsFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         fusedLocationProviderClient =  LocationServices.getFusedLocationProviderClient(requireActivity())
         fetchLocation()
+
+        floatingActionButton.setOnClickListener{
+            Snackbar.make(view, "Refreshing Location", Snackbar.LENGTH_LONG)
+                .setAction("Action", null)
+                .show()
+            fetchLocation()
+        }
+
 
     }
     private fun fetchLocation() {

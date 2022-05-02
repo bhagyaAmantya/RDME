@@ -24,9 +24,6 @@ data class Video(
     val url: String
 )
 data class SignalData(
-    val getCsiRsrp: Int,
-    val getCsiRsrq: Int,
-    val getCsiSinr: Int,
     val getSsRsrp: Int,
     val getSsRsrq: Int,
     val getSsSinr: Int,

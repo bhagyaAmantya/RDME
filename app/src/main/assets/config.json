@@ -1,0 +1,23 @@
+{
+  "payload": {
+    "cells": [
+      {
+        "id": "1",
+        "color": "#00FF00",
+        "cellname": "test cell 1"
+      },
+      {
+        "id": "2",
+        "color": "#FFA500",
+        "cellname": "Rivada cell 2"
+      }
+    ],
+    "video": {
+      "showvideo": "false",
+      "url": "https://storage.googleapis.com/exoplayer-test-media-1/gen-3/screens/dash-vod-single-segment/video-vp9-360.webm",
+      "lowUrl": "url",
+      "highUrl": "url",
+      "description": "some description"
+    }
+  }
+}
