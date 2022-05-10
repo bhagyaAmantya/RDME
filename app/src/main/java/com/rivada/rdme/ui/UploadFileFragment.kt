@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.navigation.fragment.findNavController
 import com.rivada.rdme.R
 import com.rivada.rdme.utils.AppConstants
 import com.rivada.rdme.viewmodel.MainViewModel
@@ -28,7 +29,6 @@ class UploadFileFragment : Fragment() {
 
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        //viewModel.updateConfigDialog(false)
         btn_upload.setOnClickListener(View.OnClickListener {
             val pdfIntent = Intent(Intent.ACTION_GET_CONTENT)
             pdfIntent.type = "application/json"

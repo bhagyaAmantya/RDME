@@ -16,7 +16,7 @@
 
     <fragment
         android:id="@+id/mapFragment"
-        android:name="com.rivada.rdme.ui.MapsFragment"
+        android:name="com.rivada.rdme.ui.Map"
         android:label="Location"
         tools:layout="@layout/fragment_maps" />
 
@@ -24,7 +24,11 @@
         android:id="@+id/settingFragment"
         android:name="com.rivada.rdme.ui.UploadFileFragment"
         android:label="Config"
-        tools:layout="@layout/fragment_upload" />
+        tools:layout="@layout/fragment_upload" >
+        <action
+            android:id="@+id/action_settingFragment_to_videoFragment"
+            app:destination="@id/videoFragment" />
+    </fragment>
 
     <fragment
         android:id="@+id/exitFragment"

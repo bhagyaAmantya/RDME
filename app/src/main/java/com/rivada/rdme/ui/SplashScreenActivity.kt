@@ -12,7 +12,6 @@ import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class SplashScreenActivity : AppCompatActivity() {
-   // private val STORAGE_REQUEST_CODE = 101
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.splash_activity)
@@ -30,18 +29,4 @@ class SplashScreenActivity : AppCompatActivity() {
             finish()
         }, 2500)
     }
-   /* private fun setupPermissions() {
-        val permission = ContextCompat.checkSelfPermission(this,
-            Manifest.permission.READ_EXTERNAL_STORAGE)
-
-        if (permission != PackageManager.PERMISSION_GRANTED) {
-            Log.i("bh", "Permission to record denied")
-            makeRequest()
-        }
-    }
-    private fun makeRequest() {
-        ActivityCompat.requestPermissions(this,
-            arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE),
-            STORAGE_REQUEST_CODE)
-    }*/
 }

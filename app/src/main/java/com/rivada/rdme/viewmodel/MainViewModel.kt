@@ -44,10 +44,6 @@ class MainViewModel @Inject constructor(): ViewModel () {
         mSignalStrength.value = signalStrength
         mColorCode.value = colorCode
     }
-
-    private val mCoordinates = MutableLiveData<List<LatLonModel>>()
-    val nCoordinates: MutableLiveData<List<LatLonModel>> get() = mCoordinates
-
     fun updateSignalData(signalData: SignalData){
         mSignalData.value = signalData
         updateSignalColorCode(signalData)

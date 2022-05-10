@@ -26,8 +26,11 @@ import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.*
+import com.google.android.material.snackbar.Snackbar
 import com.google.maps.android.PolyUtil
 import com.rivada.rdme.R
+import com.rivada.rdme.utils.toast
+import kotlinx.android.synthetic.main.fragment_maps.*
 import org.json.JSONObject
 import java.text.SimpleDateFormat
 import java.util.*
@@ -42,8 +45,6 @@ class Map : Fragment(), OnMapReadyCallback {
     internal var mFusedLocationClient: FusedLocationProviderClient? = null
     private val permissionCode = 101
     var locationList: MutableList<Location>?= null
-    var newtime: String? = null
-    var destLatLang:LatLng? =null
 
     private var mLocationCallback: LocationCallback = object : LocationCallback() {
         override fun onLocationResult(locationResult: LocationResult) {
@@ -62,7 +63,6 @@ class Map : Fragment(), OnMapReadyCallback {
 
                 //Place current location marker
                 val latLng = LatLng(location.latitude, location.longitude)
-                 destLatLang = LatLng(location.latitude, location.longitude)
                 val markerOptions = MarkerOptions()
                 markerOptions.position(latLng)
                 markerOptions.title("Current Position")
@@ -80,8 +80,8 @@ class Map : Fragment(), OnMapReadyCallback {
         mGoogleMap.mapType = GoogleMap.MAP_TYPE_NORMAL
 
         mLocationRequest = LocationRequest()
-        mLocationRequest.interval = 120000 // two minute interval
-        mLocationRequest.fastestInterval = 120000
+        /*mLocationRequest.interval = 120000 // two minute interval
+        mLocationRequest.fastestInterval = 120000*/
         mLocationRequest.priority = LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
@@ -111,42 +111,6 @@ class Map : Fragment(), OnMapReadyCallback {
             }
             mGoogleMap.isMyLocationEnabled = true
         }
-        val sdfDateTime = SimpleDateFormat("dd-MM-yy HH:mm:ss", Locale.US)
-        newtime = sdfDateTime.format(Date(System.currentTimeMillis()))
-       // drawMarker()
-        /*val path: MutableList<List<LatLng>> = ArrayList()
-        val urlDirections = "https://maps.googleapis.com/maps/api/directions/json?origin=14.129972," +
-                "74.493573&destination=${destLatLang?.latitude},${destLatLang?.longitude}&key=AIzaSyBPAYMgWdi2pQHx1if5ceHNiw4WrbRaY_8\n" +
-                "\n" +
-                " "
-
-        val directionsRequest = object : StringRequest(Request.Method.GET, urlDirections, Response.Listener<String> {
-                response ->
-            val jsonResponse = JSONObject(response)
-            // Get routes
-            val routes = jsonResponse.getJSONArray("routes")
-            *//*if (routes.length() == 0) {
-                // handle this case, for example
-
-            }*//*
-            val legs = routes.getJSONObject(0).getJSONArray("legs")
-            val steps = legs.getJSONObject(0).getJSONArray("steps")
-            for (i in 0 until steps.length()) {
-                val points = steps.getJSONObject(i).getJSONObject("polyline").getString("points")
-                path.add(PolyUtil.decode(points))
-            }
-            for (i in 0 until path.size) {
-                this.mGoogleMap.addPolyline(PolylineOptions().addAll(path[i]).color(Color.RED))
-            }
-        }, Response.ErrorListener {
-                _ ->
-        }){}
-        val requestQueue = Volley.newRequestQueue(requireContext())
-        requestQueue.add(directionsRequest)
-       *//* if (locationList?.isNotEmpty() == true) {
-            drawMarker(locationList)
-        }*//*
-*/
     }
 
 
@@ -225,7 +189,7 @@ class Map : Fragment(), OnMapReadyCallback {
 
                     // permission denied, boo! Disable the
                     // functionality that depends on this permission.
-                    Toast.makeText(requireContext(), "permission denied", Toast.LENGTH_LONG).show()
+                    requireActivity().toast(R.string.denied)
                 }
                 return
             }
@@ -248,7 +212,31 @@ class Map : Fragment(), OnMapReadyCallback {
 
         mapFrag = childFragmentManager.findFragmentById(R.id.map) as SupportMapFragment?
         mapFrag?.getMapAsync(this)
+        floatingActionButton.setOnClickListener {
+            Snackbar.make(view, R.string.refresh, Snackbar.LENGTH_LONG)
+                .setAction("Action", null)
+                .show()
+            fetchLocation()
+        }
+    }
 
+    private fun fetchLocation() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if (ContextCompat.checkSelfPermission(
+                    requireContext(),
+                    Manifest.permission.ACCESS_FINE_LOCATION
+                ) == PackageManager.PERMISSION_GRANTED
+            ) {
+                //Location Permission already granted
+                Looper.myLooper()?.let {
+                    mFusedLocationClient?.requestLocationUpdates(
+                        mLocationRequest, mLocationCallback,
+                        it
+                    )
+                }
+                mGoogleMap.isMyLocationEnabled = true
+            }
+        }
     }
 
     override fun onPause() {
@@ -256,31 +244,5 @@ class Map : Fragment(), OnMapReadyCallback {
 
         //stop location updates when Activity is no longer active
         mFusedLocationClient?.removeLocationUpdates(mLocationCallback)
-    }
-    private fun drawMarker() {
-        var points= ArrayList<LatLng>()
-        points.add(LatLng(14.129972, 74.493573))
-       /* points.add(LatLng(14.095866, 74.487331))
-        points.add(LatLng(14.088415, 74.492352))
-        points.add(LatLng(14.094409, 74.493339))*/
-        // Creating an instance of MarkerOptions
-        val options = PolylineOptions()
-        options.color(Color.RED)
-        for (i in 0 until points.size) {
-           // points.add(LatLng(loc[i].latitude,loc[i].longitude))
-            options.add(points[i])
-            val marker = MarkerOptions().position(points[i]).title("Bus")
-                .snippet(newtime)
-            marker.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ROSE))
-
-            // Adding marker on the Google Map
-            mGoogleMap.addMarker(marker)
-        }
-     //   mGoogleMap.addPolyline(options)
-       /* val cameraPosition = CameraPosition.Builder()
-            .target(LatLng(points[0].latitude, points[0].longitude)).zoom(18f).build()
-        mGoogleMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition))*/
-
-
     }
 }

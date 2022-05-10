@@ -46,8 +46,6 @@ class FiveGDetectionActivity : AppCompatActivity() {
         Manifest.permission.ACCESS_NETWORK_STATE,
         Manifest.permission.ACCESS_COARSE_LOCATION,
         Manifest.permission.ACCESS_FINE_LOCATION,
-        /* Manifest.permission.CHANGE_NETWORK_STATE,
-        Manifest.permission.WRITE_SETTINGS*/
     )
     private val viewModel: MainViewModel by viewModels()
     private  var nRCellId:String? = null
@@ -136,7 +134,6 @@ class FiveGDetectionActivity : AppCompatActivity() {
                                                 )
                                             )
                                             FileLog.v(TAG, cellIdentity.toString())
-                                            // checkStrength(cellInfo.cellSignalStrength.dbm)
 
                                         }
                                         is CellInfoLte -> {
@@ -150,7 +147,6 @@ class FiveGDetectionActivity : AppCompatActivity() {
                                                 )
                                             )
                                             FileLog.v(TAG, cellIdentity.toString())
-                                            //checkStrength(cellInfo.cellSignalStrength.dbm)
 
                                         }
                                         is CellInfoCdma -> {
@@ -162,7 +158,6 @@ class FiveGDetectionActivity : AppCompatActivity() {
                                                 )
                                             )
                                             FileLog.v(TAG, cellIdentity.toString())
-                                            // checkStrength(cellInfo.cellSignalStrength.dbm)
                                         }
                                         is CellInfoNr -> {
                                             FileLog.v(TAG, "Inside CellInfoNr")
@@ -186,7 +181,6 @@ class FiveGDetectionActivity : AppCompatActivity() {
                                                         signalStrength.ssSinr
                                                     )
                                                 )
-                                                // checkStrength(signalStrength.csiRsrp)
                                             } catch (e: Exception) {
                                                 e.printStackTrace()
                                             }
@@ -290,7 +284,7 @@ class FiveGDetectionActivity : AppCompatActivity() {
     private val updateTextTask = object : Runnable {
         override fun run() {
             getCellInfo()
-            mainHandler.postDelayed(this, 9000)
+            mainHandler.postDelayed(this, 10000)
         }
     }
     override fun onBackPressed() {
@@ -298,7 +292,7 @@ class FiveGDetectionActivity : AppCompatActivity() {
             super.onBackPressed()
             finish()
         } else {
-            Toast.makeText(this, R.string.exit_message, Toast.LENGTH_LONG).show()
+            this.toast(R.string.exit_message)
         }
         backPressedTime = System.currentTimeMillis()
     }

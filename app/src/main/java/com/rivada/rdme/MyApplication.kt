@@ -16,9 +16,6 @@ class MyApplication : Application() {
     override fun onCreate() {
         super.onCreate()
         val logFile = File(getExternalFilesDir(filepath), "/logs.txt")
-        /* val logFile=  File(
-               Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS),"/logs.txt" )*/
-        // val logFile = File(this.externalCacheDir!!.absolutePath, "/logs.txt")
         open(logFile, Log.VERBOSE, 1000000)
     }
 }

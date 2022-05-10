@@ -2,21 +2,20 @@ package com.rivada.rdme.ui
 
 
 import android.annotation.SuppressLint
-import android.content.Context
 import android.graphics.Color
 import android.media.MediaPlayer
 import android.net.Uri
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.MediaController
-import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.Navigation
+import androidx.navigation.Navigation.findNavController
+import androidx.navigation.fragment.findNavController
 import com.google.android.exoplayer2.DefaultRenderersFactory
 import com.google.android.exoplayer2.ExoPlayer
 import com.google.android.exoplayer2.MediaItem
@@ -31,20 +30,11 @@ import com.google.android.exoplayer2.upstream.DataSource
 import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory
 import com.rivada.rdme.R
 import com.rivada.rdme.model.Cell
-import com.rivada.rdme.model.PayLoadModel
-import com.rivada.rdme.model.Payload
 import com.rivada.rdme.utils.AppConstants
 import com.rivada.rdme.utils.AppConstants.Companion.KEY_CELL_LIST
-import com.rivada.rdme.utils.getJsonDataFromAsset
-import com.rivada.rdme.utils.readJSON
-import com.rivada.rdme.utils.signalStrengthCalculation
 import com.rivada.rdme.viewmodel.MainViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_video.*
-import java.io.BufferedReader
-import java.io.File
-import java.io.FileInputStream
-import java.io.InputStreamReader
 
 
 @AndroidEntryPoint
@@ -109,11 +99,6 @@ class VideoFragment : Fragment() {
                 internet_status.text = "${it.type} Cell ID: ${it.cid}"
             }
         }
-
-       /* viewModel.nSignalData.observe(viewLifecycleOwner) {
-         signal_values.text = "Rsrp: ${it.getSsRsrp}dbm \nRsrq: ${it.getSsRsrq}db  \nSinr: ${it.getSsSinr}"
-           // val cell = signalStrengthCalculation(it)
-        }*/
         viewModel.nSignalStrength.observe(viewLifecycleOwner){
             signal_status.text= it
         }
@@ -238,7 +223,6 @@ class VideoFragment : Fragment() {
         super.onResume()
         player?.playWhenReady = true
         player?.seekTo(currentWindow, playbackPosition)
-        Log.i("resume","again resume")
     }
 
     override fun onPause() {
@@ -259,8 +243,11 @@ class VideoFragment : Fragment() {
         val dialogBuilder = AlertDialog.Builder(requireContext())
         dialogBuilder.setMessage(R.string.title_config)
             .setCancelable(false)
-            .setPositiveButton(R.string.ok) { dialog, id ->dialog.dismiss()}
-              //  Navigation.findNavController(view).navigate(R.id.action_videoFragment_to_settingFragment)}
+            .setPositiveButton(R.string.ok) { dialog, id ->
+                dialog.dismiss()
+              // findNavController().navigate(R.id.action_videoFragment_to_settingFragment)
+
+            }
         val alert = dialogBuilder.create()
         alert.setTitle(R.string.add)
         alert.show()

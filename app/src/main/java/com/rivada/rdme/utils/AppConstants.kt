@@ -21,8 +21,6 @@ class AppConstants(var context: Context) {
 
     companion object {
         const val SELECT_FILE = 1
-        const val LOCATION_PERMISSION_CODE = 100
-        const val STORAGE_PERMISSION_CODE = 101
         const val PREF_NAME: String = "KotlinDemo"
         const val IS_UPDATE: String = "isUpdate"
         const val KEY_NAME: String = "cellname"
@@ -37,11 +35,6 @@ class AppConstants(var context: Context) {
     fun isUpdate(): Boolean {
         return pref.getBoolean(IS_UPDATE,false)
     }
-    fun setUpdate(config:Boolean){
-        editor.putBoolean(IS_UPDATE, config)
-        editor.commit()
-    }
-
     fun createUpdateSession(
         config: Boolean,
         name: String,

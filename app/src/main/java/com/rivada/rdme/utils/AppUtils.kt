@@ -14,16 +14,6 @@ import java.io.IOException
 fun Context.toast(message: Int) {
     Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
 }
-fun getJsonDataFromAsset(context: Context, fileName: String): String? {
-    val jsonString: String
-    try {
-        jsonString = context.assets.open(fileName).bufferedReader().use { it.readText() }
-    } catch (ioException: IOException) {
-        ioException.printStackTrace()
-        return null
-    }
-    return jsonString
-}
 fun readJSON(jsonFileString: String?) :PayLoadModel{
     Log.i("data", jsonFileString.toString())
     val gson = Gson()
