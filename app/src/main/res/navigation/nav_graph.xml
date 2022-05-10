@@ -11,7 +11,10 @@
         tools:layout="@layout/fragment_video" >
         <action
             android:id="@+id/action_videoFragment_to_settingFragment"
-            app:destination="@id/settingFragment" />
+            app:destination="@id/settingFragment"
+            app:popUpTo="@+id/videoFragment"
+            app:popUpToInclusive="true"
+            app:popUpToSaveState="true"/>
     </fragment>
 
     <fragment

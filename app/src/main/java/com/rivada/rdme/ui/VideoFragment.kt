@@ -13,8 +13,8 @@ import android.widget.MediaController
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.navigation.Navigation
 import androidx.navigation.Navigation.findNavController
+import androidx.navigation.fragment.NavHostFragment.Companion.findNavController
 import androidx.navigation.fragment.findNavController
 import com.google.android.exoplayer2.DefaultRenderersFactory
 import com.google.android.exoplayer2.ExoPlayer
@@ -244,8 +244,8 @@ class VideoFragment : Fragment() {
         dialogBuilder.setMessage(R.string.title_config)
             .setCancelable(false)
             .setPositiveButton(R.string.ok) { dialog, id ->
-                dialog.dismiss()
-              // findNavController().navigate(R.id.action_videoFragment_to_settingFragment)
+               // dialog.dismiss()
+                findNavController().navigate(R.id.action_videoFragment_to_settingFragment)
 
             }
         val alert = dialogBuilder.create()
