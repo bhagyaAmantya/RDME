@@ -8,7 +8,7 @@
     <string name="title">Do you want to exit from this application ?</string>
     <string name="yes">Yes</string>
     <string name="no">No</string>
-    <string name="signal_strength">Signal Strength :</string>
+    <string name="signal_strength">Signal Quality :</string>
     <string name="gsm">GSM</string>
     <string name="cdma">CDMA</string>
     <string name="lte">LTE</string>
@@ -20,5 +20,6 @@
     <string name="exit">Exit</string>
     <string name="refresh">Refreshing Location</string>
     <string name="exit_message">Press back again to exit the app.</string>
+    <string name="show_video">Show Video</string>
     <string name="uploadheader">Please upload the configuration file from internal storage by clicking Add Config button.</string>
 </resources>

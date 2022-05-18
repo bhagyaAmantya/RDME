@@ -8,7 +8,8 @@ data class PayLoadModel(
 
 data class Payload (
     val cells: List<Cell>,
-    val video: Video
+    val video: Video,
+    val home:Home
 
 )
 data class Cell(
@@ -22,6 +23,10 @@ data class Video(
     val lowUrl: String,
     val showvideo: String,
     val url: String
+)
+data class Home(
+    val networkname:String,
+    val color:String
 )
 data class SignalData(
     val getSsRsrp: Int,

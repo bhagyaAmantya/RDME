@@ -261,9 +261,9 @@ class FiveGDetectionActivity : AppCompatActivity() {
                             cells.cellname,
                             cells.color,
                             payLoadModel.payload.video.url,
-                            payLoadModel.payload.video.showvideo,
-                            cellId = cells.id
-
+                            cellId = cells.id,
+                            networkName = payLoadModel.payload.home.networkname,
+                            homeColor = payLoadModel.payload.home.color
                         )
                     }
                     else{
@@ -272,8 +272,9 @@ class FiveGDetectionActivity : AppCompatActivity() {
                            "",
                             "",
                             payLoadModel.payload.video.url,
-                            payLoadModel.payload.video.showvideo,
-                           ""
+                           "",
+                            networkName = payLoadModel.payload.home.networkname,
+                            homeColor = payLoadModel.payload.home.color
 
                         )
                     }
@@ -284,7 +285,7 @@ class FiveGDetectionActivity : AppCompatActivity() {
     private val updateTextTask = object : Runnable {
         override fun run() {
             getCellInfo()
-            mainHandler.postDelayed(this, 10000)
+            mainHandler.postDelayed(this, 2000)
         }
     }
     override fun onBackPressed() {

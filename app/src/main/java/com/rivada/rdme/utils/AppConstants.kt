@@ -28,27 +28,32 @@ class AppConstants(var context: Context) {
         const val KEY_URL: String = "url"
         const val KEY_SHOW: String = "showVideo"
         const val KEY_ID: String = "cellId"
+        const val KEY_NETWORK: String = "network"
+        const val KEY_NETWORK_COLOR: String = "networkcolor"
         const val KEY_CELL_LIST: String = "CELL_LIST"
 
     }
 
     fun isUpdate(): Boolean {
-        return pref.getBoolean(IS_UPDATE,false)
+        return pref.getBoolean(IS_UPDATE, false)
     }
+
     fun createUpdateSession(
         config: Boolean,
         name: String,
         color: String,
         uri: String,
-        showVideo: String,
-        cellId:String
+        cellId: String,
+        networkName: String,
+        homeColor: String
     ) {
         editor.putBoolean(IS_UPDATE, config)
         editor.putString(KEY_NAME, name)
         editor.putString(KEY_COLOR, color)
         editor.putString(KEY_URL, uri)
-        editor.putString(KEY_SHOW, showVideo)
         editor.putString(KEY_ID, cellId)
+        editor.putString(KEY_NETWORK, networkName)
+        editor.putString(KEY_NETWORK_COLOR, homeColor)
         editor.commit()
     }
 
@@ -56,8 +61,13 @@ class AppConstants(var context: Context) {
         return pref.getString(KEY_COLOR, "")
     }
 
-    fun getVideo(): String? {
-        return pref.getString(KEY_SHOW, "")
+    fun setVideo(showVideo: Boolean) {
+        editor.putBoolean(KEY_SHOW, showVideo)
+        editor.commit()
+    }
+
+    fun getVideo(): Boolean {
+        return pref.getBoolean(KEY_SHOW, false)
     }
 
     fun getCellName(): String? {
@@ -67,8 +77,17 @@ class AppConstants(var context: Context) {
     fun getURL(): String? {
         return pref.getString(KEY_URL, "")
     }
-    fun getCellId():String?{
-        return pref.getString(KEY_ID,"")
+
+    fun getCellId(): String? {
+        return pref.getString(KEY_ID, "")
+    }
+
+    fun getNetworkName(): String? {
+        return pref.getString(KEY_NETWORK, "")
+    }
+
+    fun getNetworkColor(): String? {
+        return pref.getString(KEY_NETWORK_COLOR, "")
     }
 
     fun saveArrayList(list: List<Cell>, key: String?) {

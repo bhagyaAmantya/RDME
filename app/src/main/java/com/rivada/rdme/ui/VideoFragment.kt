@@ -46,6 +46,7 @@ class VideoFragment : Fragment() {
     private var currentWindow = 0
     private var playbackPosition: Long = 0
     private  var nRCellId:String? = null
+    private  var nshowVideo:Boolean? = null
     private var cellsList: List<Cell>? = null
     private val dataSourceFactory: DataSource.Factory by lazy {
         DefaultDataSourceFactory(requireActivity(), "exoplayer-sample")
@@ -61,6 +62,7 @@ class VideoFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         session = AppConstants(requireActivity())
         if (session.isUpdate()) {
+            nshowVideo = session.getVideo()
             cellsList = session.getArrayList(KEY_CELL_LIST)
             if (cellsList != null) {
                 for (cells in cellsList!!) {
@@ -70,7 +72,8 @@ class VideoFragment : Fragment() {
                     }
                 }
                 setUpRawData(
-                    session.getVideo(),
+                    session.getNetworkName(),
+                    session.getNetworkColor(),
                     session.getURL()
                 )
             }
@@ -82,6 +85,14 @@ class VideoFragment : Fragment() {
         viewModel.nConfigDialog.observe(viewLifecycleOwner){
             if (it == false)
                 updateConfigFileAlert(view)
+        }
+        viewModel.nShowVideo.observe(viewLifecycleOwner){
+            nshowVideo = it
+          /*  setUpRawData(
+                session.getNetworkName(),
+                session.getNetworkColor(),
+                session.getURL()
+            )*/
         }
         viewModel.cId.observe(viewLifecycleOwner) {
             if (!it.cid.equals(0)) {
@@ -96,7 +107,7 @@ class VideoFragment : Fragment() {
                         }
                     }
                 }
-                internet_status.text = "${it.type} Cell ID: ${it.cid}"
+                lease_area.text = "${it.type} Lease Area: ${it.cid}"
             }
         }
         viewModel.nSignalStrength.observe(viewLifecycleOwner){
@@ -106,13 +117,14 @@ class VideoFragment : Fragment() {
             signal_status.setTextColor(Color.parseColor(it))
 
         }
-
         viewModel.nPayLoad.observe(viewLifecycleOwner) {
           for(cells in it.payload.cells){
               if (cells.id == nRCellId){
                   setUpRawData(
-                      it?.payload?.video?.showvideo,
+                      it?.payload?.home?.networkname,
+                      it?.payload?.home?.color,
                       it?.payload?.video?.url
+
                   )
                   setUpCellData(cells.cellname,
                       cells.color)
@@ -123,10 +135,11 @@ class VideoFragment : Fragment() {
     }
 
     private fun setUpRawData(
-        showVideo: String?,
+        networkName:String?,
+        networkColor:String?,
         videoUrl: String?
     ) {
-        if (showVideo == "true") {
+        if (nshowVideo == true) {
             val uri = Uri.parse(videoUrl)
             if (videoUrl?.contains("rtsp://") == true || uri.lastPathSegment?.contains("webm") == true) {
                 initializeVideoPlayer(videoUrl)
@@ -134,13 +147,15 @@ class VideoFragment : Fragment() {
                 initializeExoPlayer(videoUrl)
             }
         }
+        homeNetworkName.text= "Home Network: $networkName"
+        homeNetwork.setBackgroundColor(Color.parseColor(networkColor))
     }
 
     private fun setUpCellData(
         cellName: String?,
         color: String?
     ) {
-        cellID.text = cellName
+        cellID.text = "Lease Area Name: $cellName"
         layout.setBackgroundColor(Color.parseColor(color))
 
     }
@@ -221,13 +236,21 @@ class VideoFragment : Fragment() {
 
    override fun onResume() {
         super.onResume()
-        player?.playWhenReady = true
-        player?.seekTo(currentWindow, playbackPosition)
+      /*  player?.playWhenReady = true
+        player?.seekTo(currentWindow, playbackPosition)*/
+       if(player!= null) {
+           player!!.seekTo(playbackPosition)
+           player!!.playWhenReady = true
+       }
     }
 
     override fun onPause() {
         super.onPause()
-        releasePlayer()
+       // releasePlayer()
+        if(player != null && player!!.playWhenReady) {
+            playbackPosition = player!!.currentPosition
+            player!!.playWhenReady = false
+        }
     }
 
     override fun onStop() {

@@ -25,6 +25,8 @@ class ExitFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         btn_upload.visibility = View.GONE
         txt_head.visibility = View.GONE
+        switch_btn.visibility = View.GONE
+        txt_showVideo.visibility= View.GONE
         exitApp()
 
     }

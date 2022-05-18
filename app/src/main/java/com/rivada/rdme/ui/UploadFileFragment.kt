@@ -18,6 +18,7 @@ import kotlinx.android.synthetic.main.fragment_upload.*
 @AndroidEntryPoint
 class UploadFileFragment : Fragment() {
     private val viewModel: MainViewModel by activityViewModels()
+    private lateinit var session: AppConstants
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -29,6 +30,13 @@ class UploadFileFragment : Fragment() {
 
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        session = AppConstants(requireActivity())
+        if (session.getVideo() ){
+            switch_btn.isChecked = true
+        }
+        else {
+            switch_btn.isChecked = false
+        }
         btn_upload.setOnClickListener(View.OnClickListener {
             val pdfIntent = Intent(Intent.ACTION_GET_CONTENT)
             pdfIntent.type = "application/json"
@@ -39,6 +47,16 @@ class UploadFileFragment : Fragment() {
             json_text.text = "Video URL:" +
                     " ${it?.payload?.video?.url}"
         }
+        switch_btn.setOnClickListener(View.OnClickListener {
+            if (switch_btn.isChecked){
+                viewModel.updateShowVideo(true)
+                session.setVideo(showVideo = true)
+            }else
+            {
+                viewModel.updateShowVideo(false)
+                session.setVideo(showVideo = false)
+            }
+        })
 
     }
 

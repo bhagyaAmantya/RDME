@@ -30,6 +30,9 @@ class MainViewModel @Inject constructor(): ViewModel () {
     private val mConfigDialog = MutableLiveData<Boolean>()
     val nConfigDialog: LiveData<Boolean> get() = mConfigDialog
 
+    private val mShowVideo = MutableLiveData<Boolean>()
+    val nShowVideo: LiveData<Boolean> get() = mShowVideo
+
     private val mSignalData = MutableLiveData<SignalData>()
     val nSignalData: MutableLiveData<SignalData> get() = mSignalData
 
@@ -57,5 +60,7 @@ class MainViewModel @Inject constructor(): ViewModel () {
      fun updateConfigDialog(dialog:Boolean){
         mConfigDialog.value = dialog
     }
-
+    fun updateShowVideo(show_video: Boolean) {
+        mShowVideo.value = show_video
+    }
 }
