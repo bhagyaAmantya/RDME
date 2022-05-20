@@ -8,6 +8,7 @@ import com.google.gson.reflect.TypeToken
 import com.rivada.rdme.model.Cell
 import com.rivada.rdme.model.PayLoadModel
 import com.rivada.rdme.model.SignalData
+import com.rivada.rdme.model.Signalqualitycolors
 import dagger.hilt.android.qualifiers.ApplicationContext
 import java.io.IOException
 
@@ -27,7 +28,7 @@ fun readJSON(jsonFileString: String?) :PayLoadModel{
     }
     return jsonData
 }
-fun signalStrengthCalculation(signalData: SignalData): Cell? {
+fun signalStrengthCalculation(signalData: SignalData, signalQualityColors: Signalqualitycolors?): Cell? {
     var result: Cell ? = null
     var rsrp = signalData.getSsRsrp
     var rsrq = signalData.getSsRsrq
@@ -36,19 +37,19 @@ fun signalStrengthCalculation(signalData: SignalData): Cell? {
     if (rsrp > -60 && rsrp <= -80 && rsrq > -9 && rsrq <= -11 &&
         sinr > 32 || sinr >= 28
     ) {
-        result = Cell(cellname = "Excellent", color = "#008000", "")
+        result = Cell(cellname = "Excellent", color = signalQualityColors?.green.toString(), "")//green
     } else if (rsrp < -80 && rsrp >= -92 && rsrq < -11 && rsrq <= -14 &&
         sinr < 28 || sinr >= 23
     ) {
-        result = Cell(cellname = "Good", color = "#0000FF", "")
+        result = Cell(cellname = "Good", color = signalQualityColors?.blue.toString(), "") //blue
     } else if (rsrp < -92 && rsrp <= -110 && rsrq < -14 && rsrq <= -17 &&
         sinr < 23 || sinr >= 15
     ) {
-        result = Cell(cellname = "Fair", color = "#FFFF00", "")
+        result = Cell(cellname = "Fair", color = signalQualityColors?.yellow.toString(), "") //yellow
     } else if (rsrp < -110 && rsrq < -17 || sinr < 15) {
-        result = Cell(cellname = "Poor", color = "#FF0000", "")
+        result = Cell(cellname = "Poor", color = signalQualityColors?.red.toString(), "")//red
     } else {
-        result = Cell(cellname = "Invalid value of parameter", color = "#000000", "")
+        result = Cell(cellname = "Invalid value of parameter", color = signalQualityColors?.black.toString(), "")//black
     }
     return result
 

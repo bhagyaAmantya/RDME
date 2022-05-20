@@ -13,6 +13,26 @@
         android:textAppearance="@style/large_text_size"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"/>
+    <Button
+        android:id="@+id/btn_upload"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/upload"
+        app:layout_constraintTop_toBottomOf="@+id/txt_head"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        android:layout_marginTop="20dp"
+        />
+
+    <TextView
+        android:id="@+id/json_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text=""
+        android:layout_margin="8dp"
+        android:textAppearance="@style/large_text_size"
+        app:layout_constraintTop_toBottomOf="@id/btn_upload"
+        app:layout_constraintLeft_toLeftOf="parent" />
 
     <TextView
         android:id="@+id/txt_showVideo"
@@ -34,26 +54,31 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toEndOf="@+id/txt_showVideo"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <Button
-        android:id="@+id/btn_upload"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/upload"
-        app:layout_constraintTop_toBottomOf="@+id/txt_head"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        android:layout_marginTop="20dp"
-         />
+        app:layout_constraintTop_toTopOf="parent"
+        />
 
     <TextView
-        android:id="@+id/json_text"
+        android:layout_marginTop="15dp"
+        android:id="@+id/txt_showCellId"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text=""
-        android:layout_margin="8dp"
+        android:layout_marginStart="8dp"
+        android:text="@string/show_cellID"
         android:textAppearance="@style/large_text_size"
-        app:layout_constraintTop_toBottomOf="@id/btn_upload"
-        app:layout_constraintLeft_toLeftOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/txt_showVideo"
+        app:layout_constraintStart_toStartOf="parent"
+        />
+
+    <androidx.appcompat.widget.SwitchCompat
+        android:id="@+id/switch_btn_cellId"
+        android:layout_width="200dp"
+        android:layout_height="60dp"
+        android:switchMinWidth="50dp"
+        android:thumbTint="@color/black"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/txt_showVideo"
+
+        />
+
+
 </androidx.constraintlayout.widget.ConstraintLayout>

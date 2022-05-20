@@ -27,6 +27,8 @@ class ExitFragment : Fragment() {
         txt_head.visibility = View.GONE
         switch_btn.visibility = View.GONE
         txt_showVideo.visibility= View.GONE
+        txt_showCellId.visibility= View.GONE
+        switch_btn_cellId.visibility= View.GONE
         exitApp()
 
     }

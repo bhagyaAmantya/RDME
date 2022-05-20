@@ -25,6 +25,7 @@ import com.rivada.rdme.model.PayLoadModel
 import com.rivada.rdme.model.SignalData
 import com.rivada.rdme.utils.*
 import com.rivada.rdme.utils.AppConstants.Companion.KEY_CELL_LIST
+import com.rivada.rdme.utils.AppConstants.Companion.KEY_SIGNAL_COLORS
 import com.rivada.rdme.viewmodel.MainViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -147,7 +148,6 @@ class FiveGDetectionActivity : AppCompatActivity() {
                                                 )
                                             )
                                             FileLog.v(TAG, cellIdentity.toString())
-
                                         }
                                         is CellInfoCdma -> {
                                             val cellIdentity = cellInfo.cellIdentity
@@ -254,6 +254,7 @@ class FiveGDetectionActivity : AppCompatActivity() {
                 viewModel.payLoadList(payLoadModel)
                 viewModel.updateConfigDialog(true)
                 session.saveArrayList(payLoadModel.payload.cells,KEY_CELL_LIST)
+                session.saveSignalColors(payLoadModel.payload.signalqualitycolors, KEY_SIGNAL_COLORS)
                 for (cells in payLoadModel.payload.cells){
                     if (cells.id == nRCellId){
                         session.createUpdateSession(

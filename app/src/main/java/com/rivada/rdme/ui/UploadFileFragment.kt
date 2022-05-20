@@ -31,12 +31,8 @@ class UploadFileFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         session = AppConstants(requireActivity())
-        if (session.getVideo() ){
-            switch_btn.isChecked = true
-        }
-        else {
-            switch_btn.isChecked = false
-        }
+        switch_btn.isChecked = session.getVideo()
+        switch_btn_cellId.isChecked = session.getShowCellId()
         btn_upload.setOnClickListener(View.OnClickListener {
             val pdfIntent = Intent(Intent.ACTION_GET_CONTENT)
             pdfIntent.type = "application/json"
@@ -57,6 +53,16 @@ class UploadFileFragment : Fragment() {
                 session.setVideo(showVideo = false)
             }
         })
+        switch_btn_cellId.setOnClickListener(View.OnClickListener {
+            if (switch_btn_cellId.isChecked) {
+                viewModel.updateShowCellId(true)
+                session.setCellId(showCellID = true)
+            } else {
+                viewModel.updateShowCellId(false)
+                session.setCellId(showCellID = false)
+            }
+        })
+
 
     }
 

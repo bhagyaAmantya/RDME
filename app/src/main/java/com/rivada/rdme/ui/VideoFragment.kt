@@ -6,6 +6,7 @@ import android.graphics.Color
 import android.media.MediaPlayer
 import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -30,8 +31,11 @@ import com.google.android.exoplayer2.upstream.DataSource
 import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory
 import com.rivada.rdme.R
 import com.rivada.rdme.model.Cell
+import com.rivada.rdme.model.SignalData
+import com.rivada.rdme.model.Signalqualitycolors
 import com.rivada.rdme.utils.AppConstants
 import com.rivada.rdme.utils.AppConstants.Companion.KEY_CELL_LIST
+import com.rivada.rdme.utils.AppConstants.Companion.KEY_SIGNAL_COLORS
 import com.rivada.rdme.viewmodel.MainViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_video.*
@@ -47,7 +51,10 @@ class VideoFragment : Fragment() {
     private var playbackPosition: Long = 0
     private  var nRCellId:String? = null
     private  var nshowVideo:Boolean? = null
+    private  var showCellID:Boolean? = null
     private var cellsList: List<Cell>? = null
+    private lateinit var signalqualitycolorsData:Signalqualitycolors
+    private lateinit var signalData: SignalData
     private val dataSourceFactory: DataSource.Factory by lazy {
         DefaultDataSourceFactory(requireActivity(), "exoplayer-sample")
     }
@@ -61,9 +68,13 @@ class VideoFragment : Fragment() {
     @SuppressLint("SetTextI18n")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         session = AppConstants(requireActivity())
+        signalData = SignalData()
+        signalqualitycolorsData = Signalqualitycolors()
         if (session.isUpdate()) {
             nshowVideo = session.getVideo()
+            showCellID = session.getShowCellId()
             cellsList = session.getArrayList(KEY_CELL_LIST)
+            signalqualitycolorsData = session.getSignalColors(KEY_SIGNAL_COLORS)!!
             if (cellsList != null) {
                 for (cells in cellsList!!) {
                     if (cells.id == nRCellId) {
@@ -77,9 +88,20 @@ class VideoFragment : Fragment() {
                     session.getURL()
                 )
             }
+            if(signalData!= null && signalqualitycolorsData!= null) {
+                viewModel.updateSignalColorCode(signalData, signalqualitycolorsData)
+            }
         }
         else{
             updateConfigFileAlert(view)
+            viewModel.updateSignalColorCode(signalData, Signalqualitycolors(
+                green = "#7CFC00",
+                blue="#F0FFFF",
+                red= "#8B0000",
+                yellow ="#FAFAD2",
+                black= "#A9A9A9"
+            )
+            )
         }
 
         viewModel.nConfigDialog.observe(viewLifecycleOwner){
@@ -88,11 +110,6 @@ class VideoFragment : Fragment() {
         }
         viewModel.nShowVideo.observe(viewLifecycleOwner){
             nshowVideo = it
-          /*  setUpRawData(
-                session.getNetworkName(),
-                session.getNetworkColor(),
-                session.getURL()
-            )*/
         }
         viewModel.cId.observe(viewLifecycleOwner) {
             if (!it.cid.equals(0)) {
@@ -107,7 +124,22 @@ class VideoFragment : Fragment() {
                         }
                     }
                 }
-                lease_area.text = "${it.type} Lease Area: ${it.cid}"
+                if(showCellID == true){
+                    lease_area.visibility = View.VISIBLE
+                    lease_area.text = "Lease Area: $nRCellId"
+                } else{
+                    lease_area.visibility = View.GONE
+                }
+            }
+        }
+        viewModel.nShowCellID.observe(viewLifecycleOwner){itShowCellId ->
+            showCellID = itShowCellId
+            if (itShowCellId == true){
+                lease_area.visibility = View.VISIBLE
+                lease_area.text = "Lease Area: $nRCellId"
+            }
+            else{
+                lease_area.visibility = View.GONE
             }
         }
         viewModel.nSignalStrength.observe(viewLifecycleOwner){
@@ -118,6 +150,7 @@ class VideoFragment : Fragment() {
 
         }
         viewModel.nPayLoad.observe(viewLifecycleOwner) {
+            signalqualitycolorsData = it.payload.signalqualitycolors
           for(cells in it.payload.cells){
               if (cells.id == nRCellId){
                   setUpRawData(
@@ -131,6 +164,10 @@ class VideoFragment : Fragment() {
               }
           }
 
+
+        }
+        viewModel.nSignalData.observe(viewLifecycleOwner){
+            signalData = it
         }
     }
 
@@ -149,13 +186,14 @@ class VideoFragment : Fragment() {
         }
         homeNetworkName.text= "Home Network: $networkName"
         homeNetwork.setBackgroundColor(Color.parseColor(networkColor))
+
     }
 
     private fun setUpCellData(
         cellName: String?,
         color: String?
     ) {
-        cellID.text = "Lease Area Name: $cellName"
+        leaseAreaName.text = "Lease Area Name: $cellName"
         layout.setBackgroundColor(Color.parseColor(color))
 
     }

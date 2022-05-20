@@ -21,5 +21,6 @@
     <string name="refresh">Refreshing Location</string>
     <string name="exit_message">Press back again to exit the app.</string>
     <string name="show_video">Show Video</string>
+    <string name="show_cellID">Show CellID</string>
     <string name="uploadheader">Please upload the configuration file from internal storage by clicking Add Config button.</string>
 </resources>
