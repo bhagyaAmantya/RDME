@@ -35,9 +35,8 @@ data class SignalData(
     var getSsSinr: Int=-1,
 )
 data class Signalqualitycolors(
-    var green:String? =null,
-    var blue:String?=null,
-    var red:String?=null,
-    var yellow:String?=null,
-    var black:String?=null
+    var excellent:String? =null,
+    var good:String?=null,
+    var fair:String?=null,
+    var poor:String?=null
 )

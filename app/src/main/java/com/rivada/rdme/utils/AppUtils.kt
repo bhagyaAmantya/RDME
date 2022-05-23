@@ -37,19 +37,19 @@ fun signalStrengthCalculation(signalData: SignalData, signalQualityColors: Signa
     if (rsrp > -60 && rsrp <= -80 && rsrq > -9 && rsrq <= -11 &&
         sinr > 32 || sinr >= 28
     ) {
-        result = Cell(cellname = "Excellent", color = signalQualityColors?.green.toString(), "")//green
+        result = Cell(cellname = "Excellent", color = signalQualityColors?.excellent.toString(), "")//green
     } else if (rsrp < -80 && rsrp >= -92 && rsrq < -11 && rsrq <= -14 &&
         sinr < 28 || sinr >= 23
     ) {
-        result = Cell(cellname = "Good", color = signalQualityColors?.blue.toString(), "") //blue
+        result = Cell(cellname = "Good", color = signalQualityColors?.good.toString(), "") //blue
     } else if (rsrp < -92 && rsrp <= -110 && rsrq < -14 && rsrq <= -17 &&
         sinr < 23 || sinr >= 15
     ) {
-        result = Cell(cellname = "Fair", color = signalQualityColors?.yellow.toString(), "") //yellow
+        result = Cell(cellname = "Fair", color = signalQualityColors?.fair.toString(), "") //yellow
     } else if (rsrp < -110 && rsrq < -17 || sinr < 15) {
-        result = Cell(cellname = "Poor", color = signalQualityColors?.red.toString(), "")//red
+        result = Cell(cellname = "Poor", color = signalQualityColors?.poor.toString(), "")//red
     } else {
-        result = Cell(cellname = "Invalid value of parameter", color = signalQualityColors?.black.toString(), "")//black
+        result = Cell(cellname = "Invalid value of parameter", color = "#000000", "")//black
     }
     return result
 

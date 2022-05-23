@@ -95,13 +95,13 @@ class VideoFragment : Fragment() {
         else{
             updateConfigFileAlert(view)
             viewModel.updateSignalColorCode(signalData, Signalqualitycolors(
-                green = "#7CFC00",
-                blue="#F0FFFF",
-                red= "#8B0000",
-                yellow ="#FAFAD2",
-                black= "#A9A9A9"
+                excellent = "#7CFC00",
+                good = "#F0FFFF",
+                fair= "#8B0000",
+                poor ="#FAFAD2"
             )
             )
+
         }
 
         viewModel.nConfigDialog.observe(viewLifecycleOwner){
