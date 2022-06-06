@@ -88,9 +88,7 @@ class VideoFragment : Fragment() {
                     session.getURL()
                 )
             }
-            if(signalData!= null && signalqualitycolorsData!= null) {
-                viewModel.updateSignalColorCode(signalData, signalqualitycolorsData)
-            }
+
         }
         else{
             updateConfigFileAlert(view)
@@ -126,7 +124,7 @@ class VideoFragment : Fragment() {
                 }
                 if(showCellID == true){
                     lease_area.visibility = View.VISIBLE
-                    lease_area.text = "Lease Area: $nRCellId"
+                    lease_area.text = "Cell ID: $nRCellId"
                 } else{
                     lease_area.visibility = View.GONE
                 }
@@ -136,7 +134,7 @@ class VideoFragment : Fragment() {
             showCellID = itShowCellId
             if (itShowCellId == true){
                 lease_area.visibility = View.VISIBLE
-                lease_area.text = "Lease Area: $nRCellId"
+                lease_area.text = "Cell ID: $nRCellId"
             }
             else{
                 lease_area.visibility = View.GONE
@@ -168,6 +166,17 @@ class VideoFragment : Fragment() {
         }
         viewModel.nSignalData.observe(viewLifecycleOwner){
             signalData = it
+            if(signalData!= null && signalqualitycolorsData!= null) {
+                viewModel.updateSignalColorCode(signalData, signalqualitycolorsData)
+            }
+            else{
+                viewModel.updateSignalColorCode(signalData, Signalqualitycolors(
+                    excellent = "#7CFC00",
+                    good = "#F0FFFF",
+                    fair= "#8B0000",
+                    poor ="#FAFAD2"
+                ))
+            }
         }
     }
 
@@ -193,7 +202,7 @@ class VideoFragment : Fragment() {
         cellName: String?,
         color: String?
     ) {
-        leaseAreaName.text = "Lease Area Name: $cellName"
+        leaseAreaName.text = "Lease Area: $cellName"
         layout.setBackgroundColor(Color.parseColor(color))
 
     }
